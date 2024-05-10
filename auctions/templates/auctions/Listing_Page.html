@@ -1,0 +1,65 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if owner %}
+    <div class="close"><a href="{% url 'close_bidding' Listing_id=auction_listing.id %}">Close</a></div>
+    {% endif %}
+    <div class="auction">
+        <div class="img"><img src="{{ auction_listing.image }}" alt=""></div>
+        <div>
+            {% if wish == 'Remove from wishlist' %}
+                <a href="{% url 'rem_Wishlist' Listing_id=auction_listing.id %}"><h3>{{ wish }}</h3></a>
+            {% elif wish == 'Add to wishlist' %}
+                <a href="{% url 'Add_Wishlist' Listing_id=auction_listing.id %}"><h3>{{ wish }}</h3></a>
+            {% endif %}
+            <h2>{{ auction_listing.name }}({{auction_listing.status}})</h2>
+            <h4>Price: ${{ auction_listing.price }}</h4>
+            <h5>Description: {{ auction_listing.description }}</h5>
+            <p>Created at: {{ auction_listing.time }}</p>
+            <p>{{ auction_listing.owner }}</p>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <h2>Highest Bid: ${{ highest_bid_price }}</h2>
+    <h3>{{ highest_bidder }}</h3>
+        {% if user.is_authenticated %}
+            {% if message %}
+                <h2>{{ message }}</h2>
+            {% endif %}
+
+            <form method="post" action="{% url 'place_bid' Listing_id=auction_listing.id %}">
+                {% csrf_token %}
+                <label for="bid_price">Your Bid:</label>
+                <input type="number" name="bid_price" step="0.01" min="{{ highest_bid_price }}" required>
+                <input type="submit" value="Place Bid">
+            </form>
+        {% endif %}
+        <br>
+        <hr>
+        <br>
+        <div class="comments">
+            {% for comment in comments %}
+            <div class="comment">
+                <h3>{{ comment.user }}</h3>
+                <p>{{ comment.content }}</p>
+                <p>{{ comment.time }}</p>
+            </div>
+            <br>
+            <hr>
+            {% endfor %}
+        </div>
+        <br>
+        <hr>
+        <br>
+        {% if user.is_authenticated %}
+        <form action="{% url 'add_comment' Listing_id=auction_listing.id %}" method="post">
+            {% csrf_token %}
+            <label for="">AS: {{ request.user }}:</label>
+            <label for="">Add Comment</label>
+            <input type="text" name="comment_text">
+            <input type="submit">
+        </form>
+        {% endif %}
+{% endblock %}

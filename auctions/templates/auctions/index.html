@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="title3"><h2>Active Listings</h2></div>
+    <div class="AuctionListings">
+        <div class="row">
+            {% for AuctionList in AuctionListing %}
+                <div class="AuctionList">
+                    <a class="Link" href="{% url 'listing_page' AuctionList.id %}">
+                        <div>
+                            <div class="img"><img src="{{ AuctionList.image }}" alt=""></div>
+                            <div>
+                                <h2>{{ AuctionList.name }}</h2>
+                                <h4>Price: ${{ AuctionList.price }}</h4>
+                                <p>Created at {{ AuctionList.time }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                    </div>
+                    <div class="row">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

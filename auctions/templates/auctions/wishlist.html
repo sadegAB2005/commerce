@@ -1,0 +1,38 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+    <div class="title3">
+        <h2>Active Listings</h2>
+    </div>
+    <div class="AuctionListings">
+        <div class="row">
+            {% for AuctionList in AuctionListings %}
+                <div class="AuctionList">
+                    <a class="Link" href="{% url 'listing_page' AuctionList.id %}">
+                        <div>
+                            <div class="img"><img src="{{ AuctionList.image }}" alt=""></div>
+                            <div>
+                                <h2>{{ AuctionList.name }}</h2>
+                                <h4>Price: ${{ AuctionList.price }}</h4>
+                                <p>Created at {{ AuctionList.time }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+            <div class="wishi">
+                <br>
+                <div>
+                    {% if user.is_authenticated %}
+                    <div>
+                        <h1>Wishlist is Empty</h1>
+                    </div>
+                    <p>Add some items to your wishlist <a href="{% url 'index' %}">here</a>.</p>
+                {% else %}
+                    <p>Sign in to add items to your wishlist.</p>
+                {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+  <h2>Unauthorized Access</h2>
+  <p>You need to be logged in to access this page.</p>
+  <a href="{% url 'login' %}">Click here to login</a>
+{% endblock %}
